@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joshua Ledama's Weather App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #74ebd5, #acb6e5);
+            color: #333;
+            text-align: center;
+            padding: 50px;
+            overflow-x: hidden;
+            animation: fadeInBackground 6s infinite alternate;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInContainer 2s ease;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+            padding: 30px;
+            margin: 20px;
+            transition: transform 0.3s;
+            animation: slideIn 1.5s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        input[type="text"] {
+            padding: 15px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: box-shadow 0.3s;
+        }
+        input[type="text"]:focus {
+            box-shadow: 0 0 10px #00796b;
+        }
+        button {
+            padding: 10px 30px;
+            background: #00796b;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            transition: background 0.3s, transform 0.3s;
+            animation: pulse 2s infinite;
+        }
+        button:hover {
+            background: #004d40;
+            transform: translateY(-3px);
+        }
+        footer {
+            margin-top: 50px;
+            color: #fff;
+            animation: fadeIn 2s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-100px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes fadeInBackground {
+            from { background: linear-gradient(to bottom right, #74ebd5, #acb6e5); }
+            to { background: linear-gradient(to bottom right, #ff9a9e, #fad0c4); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Joshua Ledama's Weather App</h1>
+        <p>Get real-time weather updates for any city around the world.</p>
+
+        <div class="card">
+            <h2>Check Weather</h2>
+            <img src="https://source.unsplash.com/400x200/?weather,sky" alt="Weather Image" style="border-radius: 10px; margin-bottom: 15px; animation: fadeInImage 2s ease;">
+            <input type="text" id="city" placeholder="Enter city name">
+            <button onclick="getWeather()">Get Weather</button>
+            <div id="weatherResult"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Developed by Joshua Ledama</p>
+        <p>Email: joshualedama3@gmail.com | Phone: 0725401725</p>
+    </footer>
+
+    <script>
+        function getWeather() {
+            const city = document.getElementById('city').value;
+            const apiKey = '412742b808b77b0950524b5d481a1dce';
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const resultDiv = document.getElementById('weatherResult');
+                    if (data.cod === 200) {
+                        resultDiv.innerHTML = `
+                            <h3>${data.name}</h3>
+                            <p>Temperature: ${data.main.temp} °C</p>
+                            <p>Weather: ${data.weather[0].description}</p>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `<p>City not found. Please try again.</p>`;
+                    }
+                })
+                .catch(error => console.log('Error:', error));
+        }
+    </script>
+</body>
+</html>
